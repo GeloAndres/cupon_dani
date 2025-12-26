@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupón Especial de Amor</title>
+    <style>
+        /* CSS: Diseño y Colores */
+        :root {
+            --color-primario: #ff4d6d;
+            --color-secundario: #fff0f3;
+            --color-texto: #590d22;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secundario);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--color-texto);
+        }
+
+        .contenedor {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 { color: var(--color-primario); }
+
+        input {
+            padding: 12px;
+            width: 80%;
+            border: 2px solid var(--color-primario);
+            border-radius: 10px;
+            outline: none;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: var(--color-primario);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover { transform: scale(1.05); }
+
+        /* Estilo del Cupón (Oculto al inicio) */
+        #resultado {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 3px dashed var(--color-primario);
+            border-radius: 15px;
+            background-color: #fff5f6;
+            animation: aparecer 0.5s ease-out;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mensaje-error { color: red; font-size: 0.9rem; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <div id="pantalla-inicio">
+            <h1>❤️ Vale por...</h1>
+            <p>Introduce tu código secreto para canjear tu regalo especial:</p>
+            <input type="text" id="codigoInput" placeholder="Ej: AMOR2025">
+            <br>
+            <button onclick="canjearCupon()">Canjear Cupón</button>
+            <p id="error" class="mensaje-error"></p>
+        </div>
+
+        <div id="resultado">
+            <h2 id="tituloRegalo">🎁 ¡Felicidades!</h2>
+            <p id="descripcionRegalo"></p>
+            <p style="font-size: 0.8rem; color: #888;">Presenta esta pantalla para hacerlo válido.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // JavaScript: Lógica de canje
+        function canjearCupon() {
+            const codigo = document.getElementById('codigoInput').value.trim().toUpperCase();
+            const error = document.getElementById('error');
+            const resultado = document.getElementById('resultado');
+            const descripcion = document.getElementById('descripcionRegalo');
+            const pantallaInicio = document.getElementById('pantalla-inicio');
+
+            // --- CONFIGURACIÓN DE TUS CÓDIGOS ---
+            const cupones = {
+                "AMOR2025": "Vale por una cena romántica en tu lugar favorito.",
+                "BESO": "Vale por una tarde entera de películas y palomitas.",
+                "VIAJE": "Vale por una escapada de fin de semana."
+            };
+
+            if (cupones[codigo]) {
+                // Si el código es correcto
+                error.innerText = "";
+                descripcion.innerText = cupones[codigo];
+                
+                // Mostrar resultado y lanzar confeti
+                resultado.style.display = "block";
+                pantallaInicio.style.display = "none";
+                
+                lanzarConfeti();
+            } else {
+                // Si el código es incorrecto
+                error.innerText = "Ese código no es válido, ¡intenta de nuevo! ❤️";
+            }
+        }
+
+        function lanzarConfeti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ffb3c1', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
