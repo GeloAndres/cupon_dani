@@ -456,24 +456,14 @@
     }
     .lokiOverlay .mask{
       position: relative;
-      width: min(640px, 90vw);
-      aspect-ratio: 1 / 1;
-      border-radius: 28px;
-      overflow: hidden;
-      background: #05060a;
-      border: 2px solid #26323c;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.55);
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.65), rgba(0,0,0,0.98));
       display: grid;
       place-items: center;
+      overflow: hidden;
     }
-    .lokiOverlay .mask::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06), transparent 45%);
-      pointer-events:none;
-    }
-    #loki3d{
+    #pixelCanvas{
       width: 100%;
       height: 100%;
       display:block;
@@ -584,7 +574,6 @@
               <button class="btn btn-ghost" onclick="probarAnimaciones()">Animaciones</button>
               <button class="btn btn-ghost" onclick="lanzarConfeti()">Confeti</button>
               <button class="btn btn-ghost" onclick="probarCanjeDemo()">Probar canje</button>
-              <button class="btn btn-primary" onclick="probarLoki3D()">Probar Loki 3D</button>
             </div>
 
             <div class="divider" style="margin:10px 0;"></div>
@@ -610,118 +599,13 @@
 
   <div class="lokiOverlay" id="lokiOverlay" aria-live="polite">
     <div class="mask">
-      <canvas id="loki3d"></canvas>
-      <div class="label">Casco de Loki — 3D</div>
+      <canvas id="pixelCanvas"></canvas>
+      <div class="label">Transformación lista</div>
     </div>
   </div>
 
   <!-- Confetti (opcional) -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script type="module">
-    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
-    import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/loaders/GLTFLoader.js";
-
-    const MODEL_URL = "loki_helmet.glb";
-
-    let started = false;
-    let renderer, scene, camera, helmet;
-
-    function startLoki3D(){
-      if (started) return;
-      started = true;
-
-      const canvas = document.getElementById("loki3d");
-      const container = canvas.parentElement;
-      const label = document.querySelector(".lokiOverlay .label");
-      const setStatus = (msg) => { if (label) label.textContent = msg; };
-      setStatus("Cargando casco...");
-
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x05060a);
-
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-
-      camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
-      camera.position.set(0, 0, 10); // aleja la cámara para pruebas
-
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio || 1);
-      renderer.setSize(w, h, false);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-      scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-
-      const key = new THREE.DirectionalLight(0xffffff, 1.25);
-      key.position.set(2.5, 3.0, 2.0);
-      scene.add(key);
-
-      const fill = new THREE.DirectionalLight(0xffc1d6, 0.55);
-      fill.position.set(-2.5, 1.5, 2.0);
-      scene.add(fill);
-
-      const rim = new THREE.DirectionalLight(0xffffff, 0.85);
-      rim.position.set(0, 2.0, -3.0);
-      scene.add(rim);
-
-      const loader = new GLTFLoader();
-      loader.load(MODEL_URL, (gltf) => {
-        helmet = gltf.scene;
-
-        helmet.traverse((obj) => {
-          if (obj.isMesh && obj.material){
-            obj.material.metalness = 0.9;
-            obj.material.roughness = 0.35;
-          }
-        });
-
-        const box = new THREE.Box3().setFromObject(helmet);
-        const size = new THREE.Vector3();
-        box.getSize(size);
-        const maxAxis = Math.max(size.x, size.y, size.z);
-        helmet.scale.multiplyScalar(1.2 / maxAxis);
-
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        helmet.position.sub(center);
-
-        scene.add(helmet);
-        animate();
-        setStatus("Casco de Loki — 3D");
-      }, undefined, (err) => {
-        console.error("Error cargando GLB:", err);
-        setStatus("Error cargando modelo (revisa ruta/red).");
-      });
-
-      function animate(){
-        requestAnimationFrame(animate);
-        if (helmet){
-          helmet.rotation.y += 0.012;
-          helmet.rotation.x = Math.sin(performance.now() * 0.0004) * 0.05;
-        }
-        renderer.render(scene, camera);
-      }
-
-    window.addEventListener("resize", () => {
-      const w2 = container.clientWidth;
-      const h2 = container.clientHeight;
-      camera.aspect = w2 / h2;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w2, h2, false);
-    });
-  }
-
-  window.startLoki3D = startLoki3D;
-
-  // Forzar carga del casco al cargar la página (modo prueba rápida)
-  window.addEventListener("load", () => {
-    const ov = document.getElementById("lokiOverlay");
-    if (ov){
-      ov.classList.add("show");
-      startLoki3D();
-    }
-  });
-</script>
 
   <script>
     /************************************************************
@@ -985,16 +869,12 @@
       lanzarConfeti();
     }
 
-    function probarLoki3D(){
-      window.__lokiTriggered = true;
-      triggerLokiOverlay();
-    }
-
     /************************************************************
      * TRANSFORMACIÓN: cuenta regresiva + Loki
      ************************************************************/
     let heartMode = "heart"; // heart | countdown | loki
     let transformEndsAt = null;
+    let pixelRAF = null;
 
     function startTransformCountdown(){
       heartMode = "countdown";
@@ -1007,9 +887,7 @@
       document.body.classList.add("blackout");
       pageEl.classList.add("fadeOut");
       lokiOverlay.classList.add("show");
-      if (window.startLoki3D){
-        window.startLoki3D();
-      }
+      startPixelD();
     }
 
     /************************************************************
@@ -1096,6 +974,74 @@
       }
     }
     initParticles();
+
+    function startPixelD(){
+      cancelAnimationFrame(pixelRAF);
+      resizePixelCanvas();
+      pixelRAF = requestAnimationFrame(drawPixelD);
+    }
+
+    const pixelCanvas = document.getElementById("pixelCanvas");
+    const pixelCtx = pixelCanvas.getContext("2d");
+
+    function resizePixelCanvas(){
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = pixelCanvas.getBoundingClientRect();
+      pixelCanvas.width = Math.floor(rect.width * dpr);
+      pixelCanvas.height = Math.floor(rect.height * dpr);
+      pixelCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function buildDPoints(count=3600){
+      const pts = [];
+      let tries = 0;
+      while (pts.length < count && tries < count*80){
+        tries++;
+        const x = (Math.random()*2) - 1; // -1..1
+        const y = (Math.random()*2) - 1;
+        const outer = ((x + 0.35)**2 + y*y) <= 1.0;
+        const inner = ((x + 0.35)**2 + y*y) <= 0.55**2;
+        const bar = (x <= -0.35 && Math.abs(y) <= 1);
+        if (bar || (outer && !inner && x > -0.35)){
+          pts.push({x, y});
+        }
+      }
+      return pts;
+    }
+
+    const D_POINTS = buildDPoints(3600);
+
+    function drawPixelD(time){
+      const w = pixelCanvas.getBoundingClientRect().width;
+      const h = pixelCanvas.getBoundingClientRect().height;
+      const t = time * 0.001;
+
+      pixelCtx.clearRect(0,0,w,h);
+      const beat = 1 + 0.08 * Math.sin(t*2.4) + 0.03 * Math.sin(t*4.1);
+      const scale = Math.min(w,h) * 0.46 * beat;
+      const pxBase = Math.max(1, Math.round(Math.min(w,h) / 180));
+      const px = Math.max(1, Math.round(pxBase * (0.9 + 0.12*(beat-1)/0.08)));
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+
+      pixelCtx.fillStyle = "#0b0b0f";
+      pixelCtx.fillRect(0,0,w,h);
+
+      pixelCtx.shadowColor = "rgba(10, 198, 133, 0.35)";
+      pixelCtx.shadowBlur = 18;
+      pixelCtx.fillStyle = "#0ac685";
+
+      for (const p of D_POINTS){
+        const x = cx + p.x * scale;
+        const y = cy + p.y * scale;
+        const gx = Math.round(x / px) * px;
+        const gy = Math.round(y / px) * px;
+        pixelCtx.fillRect(gx, gy, px, px);
+      }
+
+      pixelCtx.shadowBlur = 0;
+      pixelRAF = requestAnimationFrame(drawPixelD);
+    }
 
     function draw(time){
       const rect = canvas.getBoundingClientRect();
