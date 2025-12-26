@@ -1,143 +1,814 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cupón Especial de Amor</title>
-    <style>
-        /* CSS: Diseño y Colores */
-        :root {
-            --color-primario: #ff4d6d;
-            --color-secundario: #fff0f3;
-            --color-texto: #590d22;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vale por un Regalo ✨</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--color-secundario);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: var(--color-texto);
-        }
+  <style>
+    :root{
+      --bg1:#fff0f4;
+      --bg2:#fff8fb;
+      --card:#ffffffcc;
+      --stroke:#ffd1dc;
+      --text:#3a0d1f;
+      --muted:#7a3a52;
+      --accent:#ff4d6d;
+      --accent2:#ff8fab;
+      --shadow: 0 18px 40px rgba(255, 77, 109, 0.14);
+      --radius: 22px;
+    }
 
-        .contenedor {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 15% 10%, #ffe3ec 0%, transparent 55%),
+        radial-gradient(700px 500px at 85% 15%, #ffe8f2 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      padding: 22px;
+    }
 
-        h1 { color: var(--color-primario); }
+    .wrap{
+      width:min(920px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
 
-        input {
-            padding: 12px;
-            width: 80%;
-            border: 2px solid var(--color-primario);
-            border-radius: 10px;
-            outline: none;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
+    @media (max-width: 860px){
+      .wrap{ grid-template-columns: 1fr; }
+    }
 
-        button {
-            background-color: var(--color-primario);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
+    .card{
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
 
-        button:hover { transform: scale(1.05); }
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 10px 14px;
+    }
 
-        /* Estilo del Cupón (Oculto al inicio) */
-        #resultado {
-            display: none;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: 3px dashed var(--color-primario);
-            border-radius: 15px;
-            background-color: #fff5f6;
-            animation: aparecer 0.5s ease-out;
-        }
+    .brand h1{
+      margin:0;
+      font-size: 1.25rem;
+      letter-spacing: 0.2px;
+      line-height:1.15;
+    }
 
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: #ffffffb8;
+      color: var(--muted);
+      font-size: 0.9rem;
+      user-select:none;
+      white-space:nowrap;
+    }
 
-        .mensaje-error { color: red; font-size: 0.9rem; margin-top: 10px; }
-    </style>
+    .heart{
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      border-radius: 2px;
+      position: relative;
+      box-shadow: 0 0 0 6px rgba(255,77,109,0.08);
+      animation: pulse 1.7s ease-in-out infinite;
+    }
+    .heart:before,.heart:after{
+      content:"";
+      position:absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .heart:before{ left:-5px; top:0; }
+    .heart:after{ top:-5px; left:0; }
+
+    @keyframes pulse{
+      0%,100%{ transform: rotate(45deg) scale(1); }
+      50%{ transform: rotate(45deg) scale(1.08); }
+    }
+
+    .hero{
+      padding: 10px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .title{
+      margin:0;
+      font-size: 1.55rem;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.98rem;
+    }
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, var(--stroke), transparent);
+      margin: 10px 0;
+    }
+
+    .grid{
+      display:grid;
+      gap: 10px;
+    }
+
+    label{
+      display:block;
+      font-weight: 650;
+      font-size: 0.9rem;
+      margin: 4px 0 6px;
+    }
+
+    input, textarea{
+      width:100%;
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 12px 12px;
+      outline:none;
+      background: #fff;
+      color: var(--text);
+      font-size: 1rem;
+      transition: 0.15s ease;
+    }
+
+    textarea{ min-height: 96px; resize: vertical; }
+
+    input:focus, textarea:focus{
+      border-color: rgba(255,77,109,0.65);
+      box-shadow: 0 0 0 4px rgba(255,77,109,0.10);
+    }
+
+    .row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .btn{
+      border:0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor:pointer;
+      font-weight: 750;
+      font-size: 0.98rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      user-select:none;
+    }
+
+    .btn:active{ transform: translateY(1px) scale(0.99); }
+
+    .btn-primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(255,77,109,0.18);
+    }
+
+    .btn-ghost{
+      background: #ffffffb8;
+      color: var(--muted);
+      border: 1px solid var(--stroke);
+    }
+
+    .btn[disabled]{
+      opacity: 0.55;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .status{
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      padding: 12px;
+      border: 1px dashed rgba(255,77,109,0.45);
+      border-radius: 16px;
+      background: #fff5f8;
+    }
+
+    .status strong{ display:block; margin-bottom: 2px; }
+
+    .timer{
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .error{
+      color: #b00020;
+      font-size: 0.92rem;
+      margin: 6px 0 0;
+    }
+
+    .success{
+      color: #0f7b4a;
+      font-size: 0.92rem;
+      margin: 6px 0 0;
+    }
+
+    .coupon{
+      display:none;
+      padding: 14px;
+      border-radius: 18px;
+      border: 2px dashed rgba(255,77,109,0.6);
+      background: #fff;
+      animation: rise 0.35s ease-out;
+    }
+
+    @keyframes rise{
+      from{ opacity:0; transform: translateY(10px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    .coupon h2{
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+
+    .coupon p{ margin: 0; line-height:1.55; color: var(--text); }
+    .fine{ margin-top:10px; font-size: 0.85rem; color: #8b7b82; }
+
+    .list{
+      display:grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .idea{
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 12px;
+      background:#fff;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:flex-start;
+    }
+
+    .idea small{ color: var(--muted); display:block; margin-top: 6px; }
+    .idea button{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: #fff;
+      cursor:pointer;
+    }
+
+    .adminBox{
+      display:none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,77,109,0.25);
+      background: #ffffffa8;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,77,109,0.25);
+      background: #fff;
+      color: var(--muted);
+      font-size: 0.85rem;
+      user-select:none;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart{ animation:none; }
+      .coupon{ animation:none; }
+      .btn{ transition:none; }
+    }
+  </style>
 </head>
-<body>
 
-    <div class="contenedor">
-        <div id="pantalla-inicio">
-            <h1>❤️ Vale por...</h1>
-            <p>Introduce tu código secreto para canjear tu regalo especial:</p>
-            <input type="text" id="codigoInput" placeholder="Ej: AMOR2025">
-            <br>
-            <button onclick="canjearCupon()">Canjear Cupón</button>
-            <p id="error" class="mensaje-error"></p>
+<body>
+  <main class="wrap">
+
+    <!-- Columna 1: Cupón -->
+    <section class="card">
+      <div class="brand">
+        <h1>Tu cupón especial ✨</h1>
+        <div class="pill"><span class="heart" aria-hidden="true"></span> <span id="pillText">Falta poquito…</span></div>
+      </div>
+
+      <div class="hero">
+        <h2 class="title">❤️ Vale por un regalo</h2>
+        <p class="subtitle">
+          Un mini ritual: cuando llegue el momento, escribes tu código secreto… y el cupón se hace real.
+        </p>
+
+        <div class="status" id="statusBox">
+          <div>
+            <strong id="statusTitle">Bloqueado por ahora</strong>
+            <div class="timer" id="countdown">--:--:--:--</div>
+            <p class="hint" id="statusHint">Se habilita el <span id="unlockDateText"></span> (hora de Chile).</p>
+          </div>
         </div>
 
-        <div id="resultado">
+        <div class="divider"></div>
+
+        <div class="grid" id="redeemBox">
+          <div>
+            <label for="codigoInput">Código secreto</label>
+            <input id="codigoInput" type="text" placeholder="Ej: AMOR2025" autocomplete="off" />
+            <p id="redeemError" class="error"></p>
+          </div>
+
+          <div class="row">
+            <button class="btn btn-primary" id="btnRedeem" onclick="canjearCupon()">Canjear cupón</button>
+            <button class="btn btn-ghost" id="btnReset" onclick="resetPantalla()" title="Vuelve al inicio">Reiniciar</button>
+            <span class="badge" id="redeemStateBadge" style="display:none;">✔ Canjeado en este dispositivo</span>
+          </div>
+
+          <div class="coupon" id="resultado">
             <h2 id="tituloRegalo">🎁 ¡Felicidades!</h2>
             <p id="descripcionRegalo"></p>
-            <p style="font-size: 0.8rem; color: #888;">Presenta esta pantalla para hacerlo válido.</p>
+            <p class="fine">Presenta esta pantalla para hacerlo válido (y para recibir tu abrazo con intereses 😌).</p>
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Columna 2: Ideas -->
+    <section class="card">
+      <div class="brand">
+        <h1>Ideas de regalos 📝</h1>
+        <div class="pill"><span>💡</span><span>Modo sugerencias</span></div>
+      </div>
 
-    <script>
-        // JavaScript: Lógica de canje
-        function canjearCupon() {
-            const codigo = document.getElementById('codigoInput').value.trim().toUpperCase();
-            const error = document.getElementById('error');
-            const resultado = document.getElementById('resultado');
-            const descripcion = document.getElementById('descripcionRegalo');
-            const pantallaInicio = document.getElementById('pantalla-inicio');
+      <div class="hero">
+        <p class="subtitle">
+          Si te dan ganas de dejar pistas, escríbelas aquí. Yo después las puedo ver (local o enviadas a un Form, tú eliges).
+        </p>
 
-            // --- CONFIGURACIÓN DE TUS CÓDIGOS ---
-            const cupones = {
-                "AMOR2025": "Vale por una cena romántica en tu lugar favorito.",
-                "BESO": "Vale por una tarde entera de películas y palomitas.",
-                "VIAJE": "Vale por una escapada de fin de semana."
-            };
+        <div class="grid">
+          <div>
+            <label for="ideaInput">Tu idea</label>
+            <textarea id="ideaInput" placeholder="Ej: Un perfume, una salida, un libro, un fin de semana, algo hecho a mano…"></textarea>
+            <p class="hint">Tip: puedes escribir varias ideas separadas por líneas.</p>
+            <p id="ideaMsg" class=""></p>
+          </div>
 
-            if (cupones[codigo]) {
-                // Si el código es correcto
-                error.innerText = "";
-                descripcion.innerText = cupones[codigo];
-                
-                // Mostrar resultado y lanzar confeti
-                resultado.style.display = "block";
-                pantallaInicio.style.display = "none";
-                
-                lanzarConfeti();
-            } else {
-                // Si el código es incorrecto
-                error.innerText = "Ese código no es válido, ¡intenta de nuevo! ❤️";
-            }
+          <div class="row">
+            <button class="btn btn-primary" onclick="guardarIdea()">Guardar idea</button>
+            <button class="btn btn-ghost" onclick="exportarIdeas()">Exportar (.txt)</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div>
+            <div class="row" style="justify-content:space-between;">
+              <strong style="font-size:0.95rem;">Ideas guardadas</strong>
+              <span class="hint" id="ideasCount">0</span>
+            </div>
+            <div class="list" id="ideasList"></div>
+
+            <!-- Admin (opcional): borrar todo -->
+            <div class="adminBox" id="adminBox">
+              <div class="row" style="justify-content:space-between;">
+                <strong style="font-size:0.95rem;">Admin</strong>
+                <span class="badge">Solo si abres con ?admin=TU_PIN</span>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <button class="btn btn-ghost" onclick="copiarJSON()">Copiar JSON</button>
+                <button class="btn btn-ghost" onclick="borrarIdeas()">Borrar ideas</button>
+              </div>
+              <p class="hint" style="margin-top:8px;">
+                Esto afecta solo el navegador/dispositivo actual.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="hint">
+          ✅ Para que yo vea tus ideas desde <b>mi PC</b> (sin tocar tu dispositivo), activa el envío a Google Forms en el código (te explico abajo).
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Confetti (opcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    /*****************************
+     * CONFIG RÁPIDA
+     *****************************/
+    // 1) Fecha de habilitación (Chile -03:00). Cambia el año si lo necesitas.
+    const UNLOCK_AT_ISO = "2025-12-31T00:00:00-03:00";
+
+    // 2) (Opcional) Fecha de expiración. Si no quieres expiración, deja null.
+    // Ejemplo: "2026-01-31T23:59:59-03:00"
+    const EXPIRES_AT_ISO = null;
+
+    // 3) Tus cupones (puedes dejar 1 o varios)
+    const CUPONES = {
+      "AMOR2025": {
+        titulo: "🎁 ¡Felicidades!",
+        descripcion: "Válido por un regalo especial elegido con cariño (y con buena excusa para una cita)."
+      },
+      "CENA": {
+        titulo: "🍝 Cupón romántico",
+        descripcion: "Vale por una cena rica, con sobremesa lenta y risas."
+      },
+      "ABRAZO": {
+        titulo: "🫶 Cupón de abrazo premium",
+        descripcion: "Vale por un abrazo largo, sin apuro, con recarga emocional incluida."
+      }
+    };
+
+    // 4) Admin (opcional): si abres la página con ?admin=PIN se muestran opciones extra (local).
+    const ADMIN_PIN = "1234"; // cámbialo
+
+    // 5) Envío opcional a Google Forms (para que tú veas las ideas desde tu PC)
+    // Deja GOOGLE_FORM_ACTION vacío si no lo usarás.
+    const GOOGLE_FORM_ACTION = ""; // Ej: "https://docs.google.com/forms/d/e/XXXXX/formResponse"
+    const GOOGLE_FORM_ENTRY_IDEA = ""; // Ej: "entry.123456789"
+    const GOOGLE_FORM_ENTRY_TS = "";   // Ej: "entry.987654321" (opcional)
+
+    /*****************************
+     * ESTADO + STORAGE
+     *****************************/
+    const LS_IDEAS_KEY = "vale_regalo_ideas_v1";
+    const LS_REDEEM_KEY = "vale_regalo_redeemed_v1";
+
+    const unlockAt = new Date(UNLOCK_AT_ISO);
+    const expiresAt = EXPIRES_AT_ISO ? new Date(EXPIRES_AT_ISO) : null;
+
+    function fmtCL(date){
+      // Formato bonito en español (dependiendo del navegador)
+      try{
+        return new Intl.DateTimeFormat("es-CL", {
+          dateStyle:"full",
+          timeStyle:"short"
+        }).format(date);
+      }catch(_){
+        return date.toLocaleString();
+      }
+    }
+
+    function now(){
+      return new Date();
+    }
+
+    function isUnlocked(){
+      return now().getTime() >= unlockAt.getTime();
+    }
+
+    function isExpired(){
+      return expiresAt ? now().getTime() > expiresAt.getTime() : false;
+    }
+
+    /*****************************
+     * COUNTDOWN
+     *****************************/
+    const pillText = document.getElementById("pillText");
+    const countdownEl = document.getElementById("countdown");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusHint = document.getElementById("statusHint");
+    const unlockDateText = document.getElementById("unlockDateText");
+    const redeemBox = document.getElementById("redeemBox");
+    const btnRedeem = document.getElementById("btnRedeem");
+    const codigoInput = document.getElementById("codigoInput");
+
+    unlockDateText.textContent = fmtCL(unlockAt);
+
+    function pad2(n){ return String(n).padStart(2,"0"); }
+
+    function renderCountdown(){
+      const t = now().getTime();
+
+      // Expirado
+      if (isExpired()){
+        countdownEl.textContent = "Expirado";
+        statusTitle.textContent = "Este cupón ya expiró";
+        statusHint.textContent = "Si quieres, cambia la fecha de expiración en el código.";
+        pillText.textContent = "Ups…";
+        btnRedeem.disabled = true;
+        codigoInput.disabled = true;
+        return;
+      }
+
+      // Bloqueado (antes de unlock)
+      if (!isUnlocked()){
+        const diff = unlockAt.getTime() - t;
+        const s = Math.max(0, Math.floor(diff / 1000));
+        const d = Math.floor(s / 86400);
+        const h = Math.floor((s % 86400) / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const ss = s % 60;
+
+        countdownEl.textContent = `${pad2(d)}d : ${pad2(h)}h : ${pad2(m)}m : ${pad2(ss)}s`;
+        statusTitle.textContent = "Bloqueado por ahora";
+        statusHint.innerHTML = `Se habilita el <span>${fmtCL(unlockAt)}</span> (hora de Chile).`;
+        pillText.textContent = "Falta poquito…";
+
+        btnRedeem.disabled = true;
+        codigoInput.disabled = true;
+        return;
+      }
+
+      // Desbloqueado
+      pillText.textContent = "Disponible 💗";
+      statusTitle.textContent = "Ya puedes canjearlo";
+      if (expiresAt){
+        statusHint.textContent = `Ojo: expira el ${fmtCL(expiresAt)}.`;
+      }else{
+        statusHint.textContent = "Escribe tu código secreto y abre el regalo.";
+      }
+      countdownEl.textContent = "Listo ✨";
+      btnRedeem.disabled = false;
+      codigoInput.disabled = false;
+    }
+
+    setInterval(renderCountdown, 1000);
+    renderCountdown();
+
+    /*****************************
+     * CANJE CUPÓN
+     *****************************/
+    const redeemError = document.getElementById("redeemError");
+    const resultado = document.getElementById("resultado");
+    const tituloRegalo = document.getElementById("tituloRegalo");
+    const descripcionRegalo = document.getElementById("descripcionRegalo");
+    const redeemStateBadge = document.getElementById("redeemStateBadge");
+
+    function lanzarConfeti(){
+      try{
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+          scalar: 1,
+          colors: ["#ff4d6d", "#ff8fab", "#ffffff"]
+        });
+      }catch(_){}
+    }
+
+    function markRedeemed(){
+      localStorage.setItem(LS_REDEEM_KEY, JSON.stringify({
+        redeemedAt: new Date().toISOString()
+      }));
+      redeemStateBadge.style.display = "inline-flex";
+    }
+
+    function checkRedeemed(){
+      const v = localStorage.getItem(LS_REDEEM_KEY);
+      redeemStateBadge.style.display = v ? "inline-flex" : "none";
+    }
+
+    checkRedeemed();
+
+    function canjearCupon(){
+      redeemError.textContent = "";
+
+      if (!isUnlocked()){
+        redeemError.textContent = "Todavía no… espera al contador ❤️";
+        return;
+      }
+      if (isExpired()){
+        redeemError.textContent = "Este cupón ya expiró 🥲";
+        return;
+      }
+
+      const codigo = codigoInput.value.trim().toUpperCase();
+      if (!codigo){
+        redeemError.textContent = "Escribe un código para canjear ✨";
+        return;
+      }
+
+      const cup = CUPONES[codigo];
+      if (!cup){
+        redeemError.textContent = "Ese código no es válido, intenta de nuevo ❤️";
+        return;
+      }
+
+      tituloRegalo.textContent = cup.titulo || "🎁 ¡Felicidades!";
+      descripcionRegalo.textContent = cup.descripcion || "";
+      resultado.style.display = "block";
+      lanzarConfeti();
+      markRedeemed();
+    }
+
+    function resetPantalla(){
+      codigoInput.value = "";
+      redeemError.textContent = "";
+      resultado.style.display = "none";
+    }
+
+    const ideaInput = document.getElementById("ideaInput");
+    const ideasList = document.getElementById("ideasList");
+    const ideasCount = document.getElementById("ideasCount");
+    const ideaMsg = document.getElementById("ideaMsg");
+
+    function loadIdeas(){
+      try{
+        return JSON.parse(localStorage.getItem(LS_IDEAS_KEY) || "[]");
+      }catch(_){
+        return [];
+      }
+    }
+
+    function saveIdeas(ideas){
+      localStorage.setItem(LS_IDEAS_KEY, JSON.stringify(ideas));
+    }
+
+    function renderIdeas(){
+      const ideas = loadIdeas();
+      ideasCount.textContent = String(ideas.length);
+      ideasList.innerHTML = "";
+
+      if (ideas.length === 0){
+        ideasList.innerHTML = `<p class="hint" style="margin:0;">Aún no hay ideas guardadas.</p>`;
+        return;
+      }
+
+      for (const item of ideas.slice().reverse()){
+        const el = document.createElement("div");
+        el.className = "idea";
+        const when = new Date(item.ts);
+        el.innerHTML = `
+          <div>
+            <div style="white-space:pre-wrap; line-height:1.5;">${escapeHtml(item.text)}</div>
+            <small>${fmtCL(when)}</small>
+          </div>
+          <div>
+            <button title="Copiar" onclick="copiarTexto('${encodeURIComponent(item.text)}')">📋</button>
+          </div>
+        `;
+        ideasList.appendChild(el);
+      }
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function copiarTexto(encoded){
+      const text = decodeURIComponent(encoded);
+      navigator.clipboard?.writeText(text);
+    }
+
+    function toast(msg, ok=true){
+      ideaMsg.className = ok ? "success" : "error";
+      ideaMsg.textContent = msg;
+      setTimeout(()=>{ ideaMsg.textContent=""; }, 2600);
+    }
+
+    function guardarIdea(){
+      const raw = ideaInput.value.trim();
+      if (!raw){
+        toast("Escribe una idea primero ✨", false);
+        return;
+      }
+
+      // Permite varias líneas => varias ideas
+      const lines = raw.split("\n").map(s=>s.trim()).filter(Boolean);
+      const ideas = loadIdeas();
+
+      for (const line of lines){
+        ideas.push({ text: line, ts: new Date().toISOString() });
+        // Opcional: enviar a Google Forms
+        enviarAGoogleForms(line);
+      }
+
+      saveIdeas(ideas);
+      ideaInput.value = "";
+      renderIdeas();
+      toast("Idea guardada 💗");
+    }
+
+    function exportarIdeas(){
+      const ideas = loadIdeas();
+      if (ideas.length === 0){
+        toast("No hay ideas para exportar todavía.", false);
+        return;
+      }
+      const content = ideas
+        .map(i => `- ${i.text}  (${fmtCL(new Date(i.ts))})`)
+        .join("\n");
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ideas_regalo.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("Exportado ✅");
+    }
+
+    function copiarJSON(){
+      const ideas = loadIdeas();
+      navigator.clipboard?.writeText(JSON.stringify(ideas, null, 2));
+      toast("JSON copiado ✅");
+    }
+
+    function borrarIdeas(){
+      if (!confirm("¿Borrar todas las ideas guardadas en este dispositivo?")) return;
+      localStorage.removeItem(LS_IDEAS_KEY);
+      renderIdeas();
+      toast("Ideas borradas.");
+    }
+
+    function enviarAGoogleForms(idea){
+      if (!GOOGLE_FORM_ACTION || !GOOGLE_FORM_ENTRY_IDEA) return;
+
+      try{
+        const form = document.createElement("form");
+        form.action = GOOGLE_FORM_ACTION;
+        form.method = "POST";
+        form.target = "hidden_iframe";
+
+        const inputIdea = document.createElement("input");
+        inputIdea.type = "hidden";
+        inputIdea.name = GOOGLE_FORM_ENTRY_IDEA;
+        inputIdea.value = idea;
+
+        form.appendChild(inputIdea);
+
+        if (GOOGLE_FORM_ENTRY_TS){
+          const inputTs = document.createElement("input");
+          inputTs.type = "hidden";
+          inputTs.name = GOOGLE_FORM_ENTRY_TS;
+          inputTs.value = new Date().toISOString();
+          form.appendChild(inputTs);
         }
 
-        function lanzarConfeti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4d6d', '#ffb3c1', '#ffffff']
-            });
+        // iframe oculto para que no navegue la página
+        if (!document.getElementById("hidden_iframe")){
+          const iframe = document.createElement("iframe");
+          iframe.name = "hidden_iframe";
+          iframe.id = "hidden_iframe";
+          iframe.style.display = "none";
+          document.body.appendChild(iframe);
         }
-    </script>
+
+        document.body.appendChild(form);
+        form.submit();
+        form.remove();
+      }catch(_){}
+    }
+
+    function initAdmin(){
+      const params = new URLSearchParams(location.search);
+      const isAdmin = params.get("admin") === ADMIN_PIN;
+      if (isAdmin){
+        document.getElementById("adminBox").style.display = "block";
+      }
+    }
+
+    initAdmin();
+    renderIdeas();
+  </script>
 </body>
 </html>
